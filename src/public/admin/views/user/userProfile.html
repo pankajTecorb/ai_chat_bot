@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin | AI Chat Bot</title>
+    <link rel="icon" href="../../admin/assets/img/favicon.png" type="image" />
+    <link href="../../admin/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../admin/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- <link href="../../admin/assets/css/animate.css" rel="stylesheet" /> -->
+    <link href="../../admin/stylesheets/navbar.css" rel="stylesheet" />
+    <link href="../../admin/stylesheets/user.css" rel="stylesheet" />
+    <script src="../../admin/scripts/common/pipeline.js"></script>
+</head>
+
+<body>
+
+    <input type="checkbox" id="nav-toggle" />
+
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h2><span><img src=".." /></span><span>AI Chat Bot</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="/admin/dashboard" class="active">
+                        <span><img src=".." /></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <span><img src=".." /></span>
+                        <span>Reviews</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/FAQ">
+                        <span><img src=".." /></span>
+                        <span>FAQs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <span><img src=".." /></span>
+                        <span>Notification</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/user">
+                        <span><img src=".." /></span>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">Settings</span></a>
+                    <ul class="nav nav-second-level">
+                        <li id="app-nav"><a href="/admin/appversion">App Version</a></li>
+                        <li id="changepassword-nav"><a href="/admin/changepassword">Change Password</a></li>
+                    </ul>
+                </li>
+                <li class="bottomProfileSection">
+                    <div class="d-flex align-item-center justify-content-between">
+                        <div class="d-flex align-item-center">
+                            <div class="profileImg"><img src=".." /></div>
+                            <div>
+                                <h6>Olivia Rhye</h6>
+                                <h6>olivia@unititledui.com</h6>
+                            </div>
+                        </div>
+                        <a onclick="logout();">Logout <img src="../../../admin/assets/img/logout 1.png"> </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h2>
+                <label for="nav-toggle">
+                    <i class="fa fa-bars"></i>
+                </label>
+            </h2>
+        </header>
+        <main>
+            <div class="UserContainer">
+                <div class="innerContainer">
+                    <div class="topContainer"></div>
+                    <div class="profileHeader d-flex align-item-center justify-content-between ">
+                        <div class="d-flex align-item-center">
+                            <div class="mr-3 profileImgContainer">
+                                <img src="../../../admin//assets/img/profile.png" />
+                            </div>
+                            <div class="mt-5">
+                                <h3>Name</h3>
+                                <p>@Username</p>
+                                <div class="d-flex align-item-center ">
+                                    <p class="mr-3"><span class="mr-2">Followers</span> <img class="" src=".." /></p>
+                                    <p>Following <span>256</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buttonContainer">
+                            <button class="userBtn mr-2">Suspend User</button>
+                            <!-- Button trigger modal -->
+                            <button class="editBtn" type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#editProfileModal">
+                                Edit profile
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade profileModalContainer" id="editProfileModal" tabindex="-1"
+                                role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-0">
+                                            <!-- <h5 class="modal-title" id="editProfileModalLabel">Modal title</h5> -->
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="imgContainer">
+                                                    <img src=".." />
+                                                </div>
+                                                <input type="file" />
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="inputName">Name</label>
+                                                            <input type="text" class="form-control" id="inputName"
+                                                                placeholder="Enter Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="inputUserName">Username</label>
+                                                            <input type="text" class="form-control" id="inputUserName"
+                                                                placeholder="Enter Username">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="inputEmail">Email</label>
+                                                            <input type="email" class="form-control" id="inputEmail"
+                                                                placeholder="Enter Email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="inputNumber">Mobile Number</label>
+                                                            <input type="number" class="form-control" id="inputNumber"
+                                                                placeholder="Enter Mobile Number">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="inputAddress">Address</label>
+                                                            <textarea class="form-control" id="inputAddress"
+                                                                rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="inputBio">Bio</label>
+                                                            <textarea class="form-control" id="inputBio"
+                                                                rows="3"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="BioContactDetails">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <div class="card">
+                                    <h3>Bio</h3>
+                                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quas, quos omnis
+                                        mollitia voluptatem tenetur ipsam adipisci ipsa facere optio culpa odio, debitis
+                                        inventore. Provident similique, beatae quae exercitationem molestias hic.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <div class="card">
+                                    <h5 class="mt-3"><img src=".." /><span class="ml-3">user@mail.com</span></h5>
+                                    <h5 class="mt-3"><img src=".." /><span class="ml-3">+234 000 000 0000</span></h5>
+                                    <h5 class="mt-3"><img src=".." /><span class="ml-3">Victoria Island, Lagos</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="postsContainer mt-5">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="card">
+                                        <h3>Posts</h3>
+                                        <div class="d-flex align-item-center justify-content-between">
+                                            <div class="d-flex align-item-center">
+                                                <div><img src=".." /></div>
+                                                <p>Adewale Ola <img src=".." /> @Ade_ola</p>
+                                            </div>
+                                            <button><img src=".." /></button>
+                                        </div>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates a eaque
+                                            ab. Facilis dolore accusamus excepturi! Cum odio adipisci obcaecati, in
+                                            animi quibusdam, quia omnis sequi tempore ad voluptates aliquid?
+                                        </p>
+                                        <h5>#LagosNews #Lagos #Ikeja</h5>
+                                        <small>Mar, 25th 2022, 10:52AM</small>
+                                        <div class="ImgContainer">
+                                            <img src=".." />
+                                        </div>
+                                        <div class="postsFooter d-flex align-item-center">
+                                            <p><img src=".." />800</p>
+                                            <p><img src=".." />800</p>
+                                            <p><img src=".." />800</p>
+                                            <p><img src=".." />500</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card">
+                                        <h3>Posts</h3>
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Like</th>
+                                                    <th scope="col">Comments</th>
+                                                    <th scope="col">Shares</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>25,040 Likes</td>
+                                                    <td>245 Comments</td>
+                                                    <td>150</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="../../admin/assets/js/jquery-3.1.1.min.js"></script>
+    <script src="../../admin/assets/js/popper.min.js"></script>
+    <script src="../../admin/assets/js/bootstrap.js"></script>
+    <script>
+        var host = window.location.protocol + "//" + window.location.host;
+        function mainFunction() {
+            var token = localStorage.getItem("token");
+            if (token) {
+                window.location.replace("/admin/dashboard");
+            }
+        }
+
+        //******Search value by Enter**************/
+        $("#password").keyup(function (event) {
+            if (event.keyCode === 13) {
+                $("#btnId").click();
+            }
+        });
+    </script>
+    <script src="../../admin/scripts/auth/login.js"></script>
+</body>
+
+</html>
