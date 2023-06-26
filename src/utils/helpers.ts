@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment-timezone';
+import nodemailer from 'nodemailer'
 
 
 
@@ -101,7 +102,31 @@ function numberFormatter(num: any, digits = 1) {
 }
 
 
-
+function sendEmail(data: any) {
+    var smtpTransport = nodemailer.createTransport({
+        // service: 'gmail',
+        host: 'smtp.gmail.com',
+        service: 'gmail',
+        port: 587,
+        secure: false,
+        auth: {
+            user: 'chatbotaitecorb@gmail.com',
+            pass: 'avgvbwlxkxhpqsww'
+        }
+    });
+    var mailOptions = {
+        to: data.email,
+        from: "chatbotaitecorb@gmail.com",
+        subject: data.subject,
+        // text: data.message,
+        html: data.message
+    };
+    smtpTransport.sendMail(mailOptions, function (err) {
+        if (err) {
+            console.log(err);
+        }
+    })
+}
 
 
 export {
@@ -112,6 +137,7 @@ export {
     getDaysArray,
     getMonthsArray,
     numberFormatter,
-    randomNumber
+    randomNumber,
+    sendEmail
 
 }

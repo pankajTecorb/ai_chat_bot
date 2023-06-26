@@ -195,7 +195,7 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
                         subscription: true,
                         subscriptionType: subscriptionType,
                         subscriptionStartDate: todayDate,
-                        subscriptionEndDate: moment(new Date()).add(30, 'days').format('YYYY-MM-DD')
+                        subscriptionEndDate: moment(new Date()).add(29, 'days').format('YYYY-MM-DD')
                     }
 
                     const userObj = await userModel.updateOne({ _id: userId }, obj, { new: true });
@@ -205,7 +205,7 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
                         subscription: true,
                         subscriptionType: subscriptionType,
                         subscriptionStartDate: todayDate,
-                        subscriptionEndDate: moment(new Date()).add(365, 'days').format('YYYY-MM-DD')
+                        subscriptionEndDate: moment(new Date()).add(364, 'days').format('YYYY-MM-DD')
                     }
 
                     const userObj = await userModel.updateOne({ _id: userData._id }, obj, { new: true });
