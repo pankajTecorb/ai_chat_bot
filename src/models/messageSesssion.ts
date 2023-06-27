@@ -1,11 +1,9 @@
 import { Schema, model } from 'mongoose';
 
-interface messages {
+interface messagesSession {
     userId: String,
-    sessionId:string
     date: string;
-    message:string;
-    reply:string;
+    title:string;
     language: string;
     time: string;
     isActive: boolean,
@@ -13,12 +11,10 @@ interface messages {
 }
 
 
-const schema = new Schema<messages>({
+const schema = new Schema<messagesSession>({
     userId: { type: String , required:true },
-    sessionId: { type: String , required:true },
     date: { type: String },
-    message: { type: String , required:true },
-    reply: { type: String },
+    title: { type: String},
     language: { type: String, default: "en" },
     time: { type: String },
     isActive: { type: Boolean, default: true },
@@ -29,5 +25,5 @@ const schema = new Schema<messages>({
         versionKey: false
     });
 
-const messagesModel = model<messages>('messages', schema);
-export = messagesModel
+const messagesSessionModel = model<messagesSession>('messagesSessions', schema);
+export = messagesSessionModel

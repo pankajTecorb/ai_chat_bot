@@ -4,6 +4,7 @@ import userSessionModel from './session_token';
 import messagesModel from './messages';
 import faqModel from './faq';
 import settingModel from './setting';
+import messagesSessionModel from './messageSesssion';
 
 
 export {
@@ -13,5 +14,6 @@ export {
     faqModel,
     messagesModel,
    settingModel,
+   messagesSessionModel
     
 }

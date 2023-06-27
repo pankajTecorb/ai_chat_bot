@@ -139,7 +139,11 @@ function getProfile(userId: string): Promise<any> {
 function updateProfile(body: any, userId: string, file: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-            const userData: any = await userModel.findOne({ _id: userId });
+            const values:any = JSON.stringify(body)
+             if(!values.countryCode && !values.phoneNumber &&!values.email && !values.name){
+                reject(new CustomError(errors.en.fillRequied, StatusCodes.BAD_REQUEST))
+            }
+             const userData: any = await userModel.findOne({ _id: userId });
             if (!userData) {
                 reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
             } else {
@@ -221,6 +225,23 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
     });
 }
 
+//**********Log Out User Api's****** */
+function logOut(userId: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response :any= await userSessionModel.findOne({ userId: userId})
+            if (!response) {
+                reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
+            } else {
+                const removeData = await userSessionModel.remove({_id:response._id})
+                resolve(removeData)
+            }
+        } catch (err) {
+            console.log(err);
+            reject(err)
+        }
+    });
+}
 
 // Export default
 export default {
@@ -229,5 +250,6 @@ export default {
     checkAccount,
     getProfile,
     updateProfile,
-    userSubscription
+    userSubscription,
+    logOut
 } as const;

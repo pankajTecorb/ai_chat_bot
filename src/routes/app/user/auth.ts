@@ -18,7 +18,8 @@ export const p = {
     check: '/check-account',
      get: '/get',
     update: '/update',
-    subscription:'/subscription'
+    subscription:'/subscription',
+    logout:'/logout'
 } as const;
 
 /**
@@ -58,6 +59,11 @@ router.put(p.update, verifyAuthToken, upload.single('image'),async (req: any, re
 //**********Subscription ****** */
 router.get(p.subscription, verifyAuthToken, async (req: any, res: Response) => {
     const data = await userAuthController.userSubscription(req.query, req.user.id ,req.headers);
+    return res.status(OK).send({ data, code: OK, message: success.en.success })
+});
+//**********Log Out User ****** */
+router.get(p.logout, verifyAuthToken, async (req: any, res: Response) => {
+    const data = await userAuthController.logOut( req.user.id);
     return res.status(OK).send({ data, code: OK, message: success.en.success })
 });
 // Export default

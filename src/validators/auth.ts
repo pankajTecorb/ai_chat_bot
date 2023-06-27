@@ -8,6 +8,7 @@ const signUpSchema = Joi.object({
 
     email: Joi.string().email({ minDomainSegments: 2 }).required(),
     countryCode: Joi.string().required(),
+    gender:Joi.string(),
     phoneNumber: Joi.string()
         .min(10)
         .max(10)

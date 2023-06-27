@@ -8,6 +8,7 @@ export const errors = {
         "notSamePassword": "Confirm Password should be same as new password",
         "accountAlreadyExist": "Account with given Phone number  already exist.",
         "noSuchAccountExist": "No such account exist.",
+        "noSuchSessionExist": "No Session found with this user account ! please create  new chat again.",
         "invalidMongoId": "{{key}} must be a valid mongo ID",
         "noDatafound": "No Record Found",
         "modelFound": "With this Name Model already exist",
@@ -28,7 +29,8 @@ export const errors = {
         "incorrectPin":"Please enter correct Pin",
         "pinExpired": "Pin has been expired",
         "userWithSameEmail": "User with same Email already exist.",
-        "choseSub":"Please select atleast one Subscription type"
+        "choseSub":"Please select atleast one Subscription type",
+        "fillRequied":"Please fill all Required fields"
       
 
     }

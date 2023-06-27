@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 import StatusCodes from 'http-status-codes';
 import { NextFunction, Request, Response } from 'express';
-import { userModel } from '@models/index'
+import { userModel ,userSessionModel} from '@models/index'
 import { errors } from '@constants'
 
 const verifyAuthToken = async (req: any, res: Response, next: NextFunction) => {
@@ -21,8 +21,8 @@ const verifyAuthToken = async (req: any, res: Response, next: NextFunction) => {
             return
         }
         //Note: Commented signle device login 
-        // const session:any = await userSessionModel.findOne({ jwtToken: token })
-        // if(session.status) {
+        const session:any = await userSessionModel.findOne({ jwtToken: token })
+        if(session.status) {
         const user = await userModel.findOne({ _id: verified.id }, { isActive: 1 })
         if (user?.isActive) {
             req.user = verified;
@@ -34,13 +34,13 @@ const verifyAuthToken = async (req: any, res: Response, next: NextFunction) => {
                 code: StatusCodes.UNAUTHORIZED
             })
         }
-        // } else {
-        //     return res.status(StatusCodes.UNAUTHORIZED).json({
-        //         error: errors.en.sessionExpired,
-        //         message: errors.en.sessionExpired,
-        //         code: StatusCodes.UNAUTHORIZED
-        //     })
-        // }
+        } else {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                error: errors.en.sessionExpired,
+                message: errors.en.sessionExpired,
+                code: StatusCodes.UNAUTHORIZED
+            })
+        }
     } catch (err) {
         if (err.message == "jwt expired") {
             return res.status(StatusCodes.UNAUTHORIZED).json({

@@ -7,6 +7,7 @@ interface User {
   email: string;
   role: string;
   image: string;
+  gender:string  // Male ,Female , Other
   phoneNumber: string;
   subscription:boolean;
   subscriptionType:string;   // OneDay , Weekly , Monthly ,Yearly
@@ -27,6 +28,7 @@ const schema = new Schema<User>({
   role: { type: String, default: "User" },
   image: { type: String},
   phoneNumber: { type: String },
+  gender: { type: String },
   subscription: { type: Boolean, default: false },
   subscriptionType: { type: String },
   subscriptionStartDate: { type: String },
