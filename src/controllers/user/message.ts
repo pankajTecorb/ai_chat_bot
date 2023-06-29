@@ -196,7 +196,7 @@ function userMessageHistroy(query:any ,userId:any): Promise<any> {
                     },
                 },
                 { $match: condition },
-                { $sort: { createdAt: -1 } },
+               // { $sort: { createdAt: -1 } },
                 { $project: {date:1,sessionId:1,message:1 ,time:1 ,reply:1} }
                 
 
