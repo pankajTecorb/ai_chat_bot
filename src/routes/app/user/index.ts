@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoute from './auth';
-import messageRoute from './message'
+import messageRoute from './message';
+import paymentRoute from './payment'
 
 
 
@@ -11,6 +12,7 @@ const baseRouter = Router();
 // Setup routers
 baseRouter.use('/auth', authRoute);
 baseRouter.use('/message' , messageRoute);
+baseRouter.use('/payment' , paymentRoute);
 
 
 

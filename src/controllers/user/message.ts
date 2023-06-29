@@ -129,8 +129,9 @@ function userMessage(body: any, userId: any): Promise<any> {
 
 function userSessionHistroy(userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
-        try { console.log(userId,"user")
+        try { 
              let condition: any = {
+                title: { $exists: true ,$ne: ''  } ,
                 isDelete: false,
                 userId: new mongoose.Types.ObjectId(userId)
 
@@ -159,7 +160,7 @@ function userSessionHistroy(userId: any): Promise<any> {
                 // },
                 { $match: condition },
                 { $sort: { createdAt: -1 } },
-                { $project: {title:1, date: 1, time: 1 , "Messages.date":1,"Messages.sessionId":1,"Messages.message":1 ,"Messages.time":1 ,"Messages.reply":1} },
+                { $project: {title:1, date: 1, time: 1} },
                 
 
             ])

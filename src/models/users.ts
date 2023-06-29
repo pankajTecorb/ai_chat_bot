@@ -13,6 +13,7 @@ interface User {
   subscriptionType:string;   // OneDay , Weekly , Monthly ,Yearly
   subscriptionStartDate:string;  // Start Date of Subscription
   subscriptionEndDate:string;   //  End Date of Subscription
+  stripeId:string;       // Stripe Payment ID
   lastLoginAt: number;
   userVerify:boolean;
   isActive: boolean;
@@ -33,6 +34,7 @@ const schema = new Schema<User>({
   subscriptionType: { type: String },
   subscriptionStartDate: { type: String },
   subscriptionEndDate: { type: String },
+  stripeId: { type: String },
   lastLoginAt: { type: Number },
   userVerify: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },

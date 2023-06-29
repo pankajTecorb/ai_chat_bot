@@ -1,4 +1,5 @@
 import { userModel, messagesModel, userSessionModel } from '@models/index';
+const stripe = require('stripe')(process.env.Stripe_Secret_key)
 import { CustomError } from '@utils/errors';
 import StatusCodes from 'http-status-codes';
 const jwt = require('jsonwebtoken');
@@ -24,7 +25,13 @@ function signUp(user: any): Promise<any> {
             if (exitData) {
                 reject(new CustomError(errors.en.accountAlreadyExist, StatusCodes.BAD_REQUEST))
             } else {
+                const customer = await stripe.customers.create({
+                    name:name ? name:'',
+                    email:email ? email :'',
+                    phone:phoneNumber ? phoneNumber:''
+                });
                 user.role = role
+                user.stripeId = customer.id 
                 const userData: any = await userModel.create(user)
                 // const token: string = jwt.sign({
                 //     id: userData.id,
@@ -140,9 +147,10 @@ function updateProfile(body: any, userId: string, file: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
             const values:any = JSON.stringify(body)
-             if(!values.countryCode && !values.phoneNumber &&!values.email && !values.name){
-                reject(new CustomError(errors.en.fillRequied, StatusCodes.BAD_REQUEST))
-            }
+            // console.log(values)
+            //  if(!values.countryCode && !values.phoneNumber  && !values.name){
+            //     reject(new CustomError(errors.en.fillRequied, StatusCodes.BAD_REQUEST))
+            // }
              const userData: any = await userModel.findOne({ _id: userId });
             if (!userData) {
                 reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
