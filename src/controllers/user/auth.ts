@@ -25,6 +25,7 @@ function signUp(user: any): Promise<any> {
             if (exitData) {
                 reject(new CustomError(errors.en.accountAlreadyExist, StatusCodes.BAD_REQUEST))
             } else {
+                // Create user in stripe payment account
                 const customer = await stripe.customers.create({
                     name:name ? name:'',
                     email:email ? email :'',
@@ -130,7 +131,10 @@ function checkAccount(user: any): Promise<any> {
 function getProfile(userId: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await userModel.findOne({ _id: userId }, { "createdAt": 0, updatedAt: 0, lastLoginAt: 0, password: 0, isActive: 0, isDelete: 0, role: 0, userVerify: 0 })
+            const response:any = await userModel.findOne({ _id: userId }, { "createdAt": 0, updatedAt: 0, lastLoginAt: 0, password: 0, isActive: 0, isDelete: 0, role: 0, userVerify: 0 })
+            const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
+            const userMessage: any = await messagesModel.countDocuments({ userId: userId ,message: { $exists: true ,$ne: ''  } })
+            response.perDayMessageCount = userMessage ? userMessage:0 
             if (!response) {
                 reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
             } else {

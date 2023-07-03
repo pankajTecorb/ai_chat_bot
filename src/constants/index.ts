@@ -30,7 +30,8 @@ export const errors = {
         "pinExpired": "Pin has been expired",
         "userWithSameEmail": "User with same Email already exist.",
         "choseSub":"Please select atleast one Subscription type",
-        "fillRequied":"Please fill all Required fields"
+        "fillRequied":"Please fill all Required fields",
+        "notSendMessage":"You did not send any message yet!"
       
 
     }

@@ -15,6 +15,7 @@ interface User {
   subscriptionEndDate:string;   //  End Date of Subscription
   stripeId:string;       // Stripe Payment ID
   lastLoginAt: number;
+  perDayMessageCount:number;
   userVerify:boolean;
   isActive: boolean;
   isDelete: boolean;
@@ -35,7 +36,7 @@ const schema = new Schema<User>({
   subscriptionStartDate: { type: String },
   subscriptionEndDate: { type: String },
   stripeId: { type: String },
-  lastLoginAt: { type: Number },
+  perDayMessageCount: { type: Number },
   userVerify: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
   isDelete: { type: Boolean, default: false },

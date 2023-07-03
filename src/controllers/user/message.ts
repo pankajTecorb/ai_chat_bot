@@ -220,7 +220,7 @@ function messageCount(userId: any): Promise<any> {
             const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
             const userMessage: any = await messagesModel.countDocuments({ userId: userId, date: todayDate })
             if (!userMessage) {
-                reject(new CustomError(errors.en.accountBlocked, StatusCodes.UNAUTHORIZED))
+                reject(new CustomError(errors.en.notSendMessage, StatusCodes.UNAUTHORIZED))
             } else {
                 resolve(userMessage)
             }
