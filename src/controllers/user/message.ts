@@ -4,6 +4,10 @@ import StatusCodes from 'http-status-codes';
 import { errors } from '@constants';
 import moment from 'moment-timezone';
 import mongoose from 'mongoose';
+import { randomNumber } from '@utils/helpers'
+const fs = require('fs');
+const PDFDocument = require('pdfkit');
+const XLSX = require('xlsx');
 
 //********************** User Session create Api ************************//
 
@@ -129,9 +133,9 @@ function userMessage(body: any, userId: any): Promise<any> {
 
 function userSessionHistroy(userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
-        try { 
-             let condition: any = {
-                title: { $exists: true ,$ne: ''  } ,
+        try {
+            let condition: any = {
+                title: { $exists: true, $ne: '' },
                 isDelete: false,
                 userId: new mongoose.Types.ObjectId(userId)
 
@@ -160,8 +164,8 @@ function userSessionHistroy(userId: any): Promise<any> {
                 // },
                 { $match: condition },
                 { $sort: { createdAt: -1 } },
-                { $project: {title:1, date: 1, time: 1} },
-                
+                { $project: { title: 1, date: 1, time: 1 } },
+
 
             ])
             if (!response) {
@@ -178,13 +182,13 @@ function userSessionHistroy(userId: any): Promise<any> {
 
 //********************** User Message Histroy Api ************************//
 
-function userMessageHistroy(query:any ,userId:any): Promise<any> {
+function userMessageHistroy(query: any, userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-             let condition: any = {
+            let condition: any = {
                 isDelete: false,
                 userId: new mongoose.Types.ObjectId(userId),
-                sessionId:query.sessionId
+                sessionId: query.sessionId
 
             }
             const response = await messagesModel.aggregate([
@@ -196,9 +200,9 @@ function userMessageHistroy(query:any ,userId:any): Promise<any> {
                     },
                 },
                 { $match: condition },
-               // { $sort: { createdAt: -1 } },
-                { $project: {date:1,sessionId:1,message:1 ,time:1 ,reply:1} }
-                
+                // { $sort: { createdAt: -1 } },
+                { $project: { date: 1, sessionId: 1, message: 1, time: 1, reply: 1 } }
+
 
             ])
             if (!response) {
@@ -230,12 +234,76 @@ function messageCount(userId: any): Promise<any> {
     });
 }
 
+
+function userMessageListPdf(query: any, userId: any): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
+            const userMessage: any = await messagesModel.find({ userId: userId }, { updatedAt: 0, createdAt: 0, isDelete: 0, isActive: 0, sessionId: 0, userId: 0, language: 0 })
+            if (!userMessage) {
+                reject(new CustomError(errors.en.notSendMessage, StatusCodes.UNAUTHORIZED))
+            } else {
+                const valueNumber = randomNumber();
+                const doc = new PDFDocument();
+                // Set the output file path
+                const outputPath = `./pdf/chat_history+${valueNumber}.pdf`;
+                // Pipe the PDF document to a write stream
+                const writeStream = fs.createWriteStream(outputPath);
+                doc.pipe(writeStream);
+                // Set the document font size
+                doc.fontSize(12);
+                // Iterate over each chat message
+                userMessage.forEach((message: any) => {
+                    doc.text(`Date: ${message.date}`, { continued: true });
+                    doc.text(`Time: ${message.time}`, { continued: true });
+                    doc.moveDown();
+                    doc.text(`Message: ${message.message}`);
+                    if (message.reply) {
+                        doc.moveDown();
+                        doc.text(`Reply: ${message.reply}`);
+                    }
+                    doc.moveDown(2);
+                });
+
+                // Finalize the PDF document
+                doc.end();
+                resolve({ file: outputPath })
+                // Convert JSON to worksheet
+                // const worksheet = XLSX.utils.json_to_sheet(userMessage);
+
+                // // Create a new workbook
+                // const workbook = XLSX.utils.book_new();
+
+                // // Add the worksheet to the workbook
+                // XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+                // // Define the output file path
+                // const outputPath = `./pdf/chat_history+${valueNumber}.xlsx`;
+
+                // // Write the workbook to a file
+                // XLSX.writeFile(workbook, outputPath);
+                // resolve({ file: outputPath })
+            }
+
+        } catch (err) {
+            reject(err)
+        }
+    });
+}
+
+
+
+
+// Helper function to get the content type based on the format
+
 // Export default
 export default {
     userSession,
     userMessage,
     messageCount,
     userSessionHistroy,
-    userMessageHistroy
+    userMessageHistroy,
+    userMessageListPdf
 
 } as const;
