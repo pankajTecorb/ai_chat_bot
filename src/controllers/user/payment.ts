@@ -32,15 +32,15 @@ function createCustomerSource(body: any, userId: any): Promise<any> {
 function createCustomerPyament(body: any, userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-            const { customerId, cardAttachedID } = body
+            const { customerId, cardAttachedID ,amount} = body
             const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
             const userData: any = await userModel.findOne({ _id: userId, isDelete: false })
             if (!userData) {
                 reject(new CustomError(errors.en.noSuchAccountExist, StatusCodes.UNAUTHORIZED))
             } else {
                 const paymentIntent = await stripe.paymentIntents.create({
-                    amount: 500, // The amount in the smallest currency unit (e.g., cents)
-                    currency: 'usd', // The currency of the payment
+                    amount: (amount ? amount:500)*100, // The amount in the smallest currency unit (e.g., cents)
+                    currency: 'inr', // The currency of the payment
                     customer: customerId, // The ID of the customer
                     payment_method: cardAttachedID, // The ID of the source attached to the customer
                 });
