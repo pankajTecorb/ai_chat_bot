@@ -67,7 +67,7 @@ function customerCardPaymentList(userId: any): Promise<any> {
                 const cards = await stripe.customers.listSources(customerId,
                     { object: 'card', limit: 50 }
                 );
-                resolve({ 'List': cards, Total: cards.length });
+                resolve(cards);
             }
         } catch (err) {
             reject(err)
