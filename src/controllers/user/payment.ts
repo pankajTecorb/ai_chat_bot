@@ -131,7 +131,7 @@ function customerPaymentList(userId: any): Promise<any> {
                     customer: userData.stripeId,
                     limit: 10, // Number of payment intents to retrieve (you can adjust this as needed)
                 });
-                resolve({ 'Payment History': payments.data });
+                resolve( payments.data );
             }
         } catch (err) {
             reject(err)
