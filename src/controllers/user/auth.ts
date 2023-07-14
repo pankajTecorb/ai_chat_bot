@@ -27,12 +27,12 @@ function signUp(user: any): Promise<any> {
             } else {
                 // Create user in stripe payment account
                 const customer = await stripe.customers.create({
-                    name:name ? name:'',
-                    email:email ? email :'',
-                    phone:phoneNumber ? phoneNumber:''
+                    name: name ? name : '',
+                    email: email ? email : '',
+                    phone: phoneNumber ? phoneNumber : ''
                 });
                 user.role = role
-                user.stripeId = customer.id 
+                user.stripeId = customer.id
                 const userData: any = await userModel.create(user)
                 // const token: string = jwt.sign({
                 //     id: userData.id,
@@ -74,10 +74,13 @@ function login(body: any): Promise<any> {
                     id: userData.id,
                     role
                 }, process.env.JWT_SECRET_TOKEN, { expiresIn: '30d' })
+                const loginObj = {
+                    lastLoginAt: getEpochAfterNSeconds(0),
+                    userVerify: true
+                };
                 await userModel.updateOne(
                     { _id: userData._id },
-                    { lastLoginAt: getEpochAfterNSeconds(0) },
-                    { userVerify: true }
+                    { $set: loginObj }
                 );
                 const sessionObj = {
                     jwtToken: token,
@@ -131,10 +134,10 @@ function checkAccount(user: any): Promise<any> {
 function getProfile(userId: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-            const response:any = await userModel.findOne({ _id: userId }, { "createdAt": 0, updatedAt: 0, lastLoginAt: 0, password: 0, isActive: 0, isDelete: 0, role: 0, userVerify: 0 })
+            const response: any = await userModel.findOne({ _id: userId }, { "createdAt": 0, updatedAt: 0, lastLoginAt: 0, password: 0, isActive: 0, isDelete: 0, role: 0, userVerify: 0 })
             const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
-            const userMessage: any = await messagesModel.countDocuments({ userId: userId ,message: { $exists: true ,$ne: ''  } })
-            response.perDayMessageCount = userMessage ? userMessage:0 
+            const userMessage: any = await messagesModel.countDocuments({ userId: userId, message: { $exists: true, $ne: '' } })
+            response.perDayMessageCount = userMessage ? userMessage : 0
             if (!response) {
                 reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
             } else {
@@ -150,12 +153,12 @@ function getProfile(userId: string): Promise<any> {
 function updateProfile(body: any, userId: string, file: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-            const values:any = JSON.stringify(body)
+            const values: any = JSON.stringify(body)
             // console.log(values)
             //  if(!values.countryCode && !values.phoneNumber  && !values.name){
             //     reject(new CustomError(errors.en.fillRequied, StatusCodes.BAD_REQUEST))
             // }
-             const userData: any = await userModel.findOne({ _id: userId });
+            const userData: any = await userModel.findOne({ _id: userId });
             if (!userData) {
                 reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
             } else {
@@ -216,7 +219,7 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
 
                     const userObj = await userModel.updateOne({ _id: userId }, obj, { new: true });
                     resolve(userObj)
-                } else if(subscriptionType == 'Yearly') {
+                } else if (subscriptionType == 'Yearly') {
                     const obj = {
                         subscription: true,
                         subscriptionType: subscriptionType,
@@ -226,7 +229,7 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
 
                     const userObj = await userModel.updateOne({ _id: userData._id }, obj, { new: true });
                     resolve(userObj)
-                }else{
+                } else {
                     reject(new CustomError(errors.en.choseSub, StatusCodes.BAD_REQUEST))
                 }
 
@@ -241,11 +244,11 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
 function logOut(userId: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-            const response :any= await userSessionModel.findOne({ userId: userId})
+            const response: any = await userSessionModel.findOne({ userId: userId })
             if (!response) {
                 reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
             } else {
-                const removeData = await userSessionModel.remove({_id:response._id})
+                const removeData = await userSessionModel.remove({ _id: response._id })
                 resolve(removeData)
             }
         } catch (err) {

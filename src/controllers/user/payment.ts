@@ -75,6 +75,25 @@ function customerCardPaymentList(userId: any): Promise<any> {
     });
 }
 
+//**********************  Customer Payment Status Api ************************//
+function customerPaymentstatus(query:any,userId: any): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const userData: any = await userModel.findOne({ _id: userId, isDelete: false })
+            if (!userData) {
+                reject(new CustomError(errors.en.noSuchAccountExist, StatusCodes.UNAUTHORIZED))
+            } else {
+                const paymentIntent = await stripe.paymentIntents.retrieve(
+                    query.paymentId
+                  );
+                resolve(paymentIntent);
+            }
+        } catch (err) {
+            reject(err)
+        }
+    });
+}
+
 //**********************  Customer Card Source  Update Api ************************//
 function customerCardPaymentUpdate(body: any, userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -152,7 +171,8 @@ export default {
     customerPaymentList,
     customerCardPaymentList,
     customerCardPaymentUpdate,
-    customerCardPaymentDelete
+    customerCardPaymentDelete,
+    customerPaymentstatus
 
 
 

@@ -11,6 +11,7 @@ import { CustomError } from '@utils/errors';
 import adminRoutesFE from './routes/admin-panel';
 import adminRoutesBE from './routes/admin'
 import { connect, disconnect } from '@utils/database';
+var cron = require('./controllers/user/cronHandler')
 import '@models/index';
 // Constants
 const app = express();

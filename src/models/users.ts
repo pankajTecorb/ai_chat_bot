@@ -36,6 +36,7 @@ const schema = new Schema<User>({
   subscriptionStartDate: { type: String },
   subscriptionEndDate: { type: String },
   stripeId: { type: String },
+  lastLoginAt: { type: Number },
   perDayMessageCount: { type: Number },
   userVerify: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },

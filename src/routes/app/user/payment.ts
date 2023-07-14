@@ -17,7 +17,8 @@ export const p = {
     paymentHistory:'/payment-history',
     paymentCard :'/card-list',
     paymentCardUpdate :'/card-update',
-    paymentCardDelete :'/card-delete'
+    paymentCardDelete :'/card-delete',
+    paymentStatus :'/payment-status'
     
    
 
@@ -44,6 +45,10 @@ router.get(p.paymentCard, verifyAuthToken, async (req: any, res: Response) => {
 });
 router.post(p.paymentCardUpdate, verifyAuthToken, async (req: any, res: Response) => {
     const data = await paymentController.customerCardPaymentUpdate(req.body,req.user.id);
+    return res.status(OK).send({ data, code: OK, message: success.en.success });
+});
+router.get(p.paymentStatus, verifyAuthToken, async (req: any, res: Response) => {
+    const data = await paymentController.customerPaymentstatus(req.query,req.user.id);
     return res.status(OK).send({ data, code: OK, message: success.en.success });
 });
 router.post(p.paymentCardDelete, verifyAuthToken, async (req: any, res: Response) => {

@@ -15,18 +15,58 @@ var todaytimes= moment(new Date()).tz(timezone).format("hh:mm")
 var cron = require('node-cron');
 
 cron.schedule('0 0 0 * * *', async () => {
-    var date = moment(new Date()).tz(timezone).format('YYYY-MM-DD');
-    console.log("Running cron every midnight to change subscription key false ")
-    const userData: any = await userModel.find({ subscriptionEndDate: date,userVerify:true,isActive:true, isDelete: false  }, { _id: 1 })
+    
+    var date = moment(new Date()).subtract(1, 'days').tz(timezone).format('YYYY-MM-DD');
+    console.log("Running cron every midnight to change subscription key false  s1")
+    const userData: any = await userModel.find({ subscriptionEndDate: date }, { _id: 1 })
     for (var i = 0; i < userData.length; i++) {
         const editData = {
-            subscription: false
+            subscription: false,
+            subscriptionType:"Expire"
         }
         const userUpdateData = await userModel.updateOne({ _id: userData[i]._id }, editData, { new: true });
     }
-})
+},
+{
+        scheduled: true,
+        timezone: "Asia/Kolkata"
+      })
 
+      cron.schedule('0 0 0 * * *', async () => {
+    
+        var date = moment(new Date()).add(1, 'days').tz(timezone).format('YYYY-MM-DD');
+        console.log("Running cron every midnight to change subscription key false add1")
+        const userData: any = await userModel.find({ subscriptionEndDate: date }, { _id: 1 })
+        for (var i = 0; i < userData.length; i++) {
+            const editData = {
+                subscription: false,
+                subscriptionType:"Expire"
+            }
+            const userUpdateData = await userModel.updateOne({ _id: userData[i]._id }, editData, { new: true });
+        }
+    },
+    {
+            scheduled: true,
+            timezone: "Asia/Kolkata"
+          })
 
+          cron.schedule('0 0 0 * * *', async () => {
+    
+            var date = moment(new Date()).tz(timezone).format('YYYY-MM-DD');
+            console.log("Running cron every midnight to change subscription key false ")
+            const userData: any = await userModel.find({ subscriptionEndDate: date }, { _id: 1 })
+            for (var i = 0; i < userData.length; i++) {
+                const editData = {
+                    subscription: false,
+                    subscriptionType:"Expire"
+                }
+                const userUpdateData = await userModel.updateOne({ _id: userData[i]._id }, editData, { new: true });
+            }
+        },
+        {
+                scheduled: true,
+                timezone: "Asia/Kolkata"
+              })
 // cron.schedule('0 15 * * *', async () => {
 //     console.log("Running cron every 3PM to send Second reminder ")
 //     var today = moment(new Date()).format('YYYY-MM-DD');
