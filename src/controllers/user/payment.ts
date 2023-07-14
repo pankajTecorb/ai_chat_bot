@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.Stripe_Secret_key)
-import { userModel } from '@models/index';
+import { userModel, paymentModel } from '@models/index';
 import { CustomError } from '@utils/errors';
 import StatusCodes from 'http-status-codes';
 import { errors } from '@constants';
@@ -76,7 +76,7 @@ function customerCardPaymentList(userId: any): Promise<any> {
 }
 
 //**********************  Customer Payment Status Api ************************//
-function customerPaymentstatus(query:any,userId: any): Promise<any> {
+function customerPaymentstatus(query: any, userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
             const userData: any = await userModel.findOne({ _id: userId, isDelete: false })
@@ -85,7 +85,7 @@ function customerPaymentstatus(query:any,userId: any): Promise<any> {
             } else {
                 const paymentIntent = await stripe.paymentIntents.retrieve(
                     query.paymentId
-                  );
+                );
                 resolve(paymentIntent);
             }
         } catch (err) {
@@ -139,18 +139,26 @@ function customerCardPaymentDelete(body: any, userId: any): Promise<any> {
     });
 }
 //********************** Create Customer Source Api ************************//
-function customerPaymentList(userId: any): Promise<any> {
+function customerPaymentList(query: any, userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
+            const {page = 1, pageSize = 10 } = query;
             const userData: any = await userModel.findOne({ _id: userId, isDelete: false })
             if (!userData) {
                 reject(new CustomError(errors.en.noSuchAccountExist, StatusCodes.UNAUTHORIZED))
             } else {
-                const payments = await stripe.paymentIntents.list({
-                    customer: userData.stripeId,
-                    limit: 10, // Number of payment intents to retrieve (you can adjust this as needed)
-                });
-                resolve( payments.data );
+                // const payments = await stripe.paymentIntents.list({
+                //     customer: userData.stripeId,
+                //     limit: 10, // Number of payment intents to retrieve (you can adjust this as needed)
+                // });
+                let condition: any = {
+                    isDelete: false,
+                    userId: new mongoose.Types.ObjectId(userId),
+                }
+
+                let paymentData: any = await paymentModel.find(condition).skip(Number(page - 1) * Number(pageSize))
+                    .limit(Number(pageSize)).sort({ createdAt: -1 })
+                resolve(paymentData);
             }
         } catch (err) {
             reject(err)

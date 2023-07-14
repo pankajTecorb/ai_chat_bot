@@ -36,7 +36,7 @@ router.post(p.customerPayment, verifyAuthToken, async (req: any, res: Response) 
 
 
 router.get(p.paymentHistory, verifyAuthToken, async (req: any, res: Response) => {
-    const data = await paymentController.customerPaymentList(req.user.id);
+    const data = await paymentController.customerPaymentList(req.query,req.user.id);
     return res.status(OK).send({ data, code: OK, message: success.en.success });
 });
 router.get(p.paymentCard, verifyAuthToken, async (req: any, res: Response) => {

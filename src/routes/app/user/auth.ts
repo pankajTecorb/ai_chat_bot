@@ -57,8 +57,8 @@ router.put(p.update, verifyAuthToken, upload.single('image'),async (req: any, re
     return res.status(OK).send({ data, code: OK, message: success.en.success })
 });
 //**********Subscription ****** */
-router.get(p.subscription, verifyAuthToken, async (req: any, res: Response) => {
-    const data = await userAuthController.userSubscription(req.query, req.user.id ,req.headers);
+router.post(p.subscription, verifyAuthToken, async (req: any, res: Response) => {
+    const data = await userAuthController.userSubscription(req.body, req.user.id ,req.headers);
     return res.status(OK).send({ data, code: OK, message: success.en.success })
 });
 //**********Log Out User ****** */

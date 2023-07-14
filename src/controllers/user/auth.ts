@@ -1,4 +1,4 @@
-import { userModel, messagesModel, userSessionModel } from '@models/index';
+import { userModel, messagesModel, userSessionModel ,paymentModel} from '@models/index';
 const stripe = require('stripe')(process.env.Stripe_Secret_key)
 import { CustomError } from '@utils/errors';
 import StatusCodes from 'http-status-codes';
@@ -180,10 +180,10 @@ function updateProfile(body: any, userId: string, file: any): Promise<any> {
 
 //********************** User Subscription Apis ************************//
 
-function userSubscription(query: any, userId: string, headers: any): Promise<any> {
+function userSubscription(body: any, userId: string, headers: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-            const { subscriptionType } = query   // OneDay , Weekly , Monthly ,Yearly
+            const { subscriptionType ,amount ,paymentId,cardType,paymentStatus} = body   // OneDay , Weekly , Monthly ,Yearly
             const { timezone = "Asia/Calcutta" } = headers
             const userData: any = await userModel.findOne({ _id: userId })
             if (!userData) {
@@ -193,24 +193,41 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
                 const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
                 if (subscriptionType == 'OneDay') {
                     const obj = {
+                        userId:userId,
+                        paymentId:paymentId,
+                        amount:amount,
+                        cardType:cardType,
+                        paymentStatus:paymentStatus,
                         subscription: true,
                         subscriptionType: subscriptionType,
                         subscriptionStartDate: todayDate,
                         subscriptionEndDate: moment(new Date()).add(1, 'days').format('YYYY-MM-DD')
                     }
                     const userObj = await userModel.updateOne({ _id: userId }, obj, { new: true });
+                    await paymentModel.create(obj)
                     resolve(userObj)
                 } else if (subscriptionType == 'Weekly') {
                     const obj = {
+                        userId:userId,
+                        paymentId:paymentId,
+                        amount:amount,
+                        cardType:cardType,
+                        paymentStatus:paymentStatus,
                         subscription: true,
                         subscriptionType: subscriptionType,
                         subscriptionStartDate: todayDate,
                         subscriptionEndDate: moment(new Date()).add(6, 'days').format('YYYY-MM-DD')
                     }
                     const userObj = await userModel.updateOne({ _id: userId }, obj, { new: true });
+                    await paymentModel.create(obj)
                     resolve(userObj)
                 } else if (subscriptionType == 'Monthly') {
                     const obj = {
+                        userId:userId,
+                        paymentId:paymentId,
+                        amount:amount,
+                        cardType:cardType,
+                        paymentStatus:paymentStatus,
                         subscription: true,
                         subscriptionType: subscriptionType,
                         subscriptionStartDate: todayDate,
@@ -218,9 +235,15 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
                     }
 
                     const userObj = await userModel.updateOne({ _id: userId }, obj, { new: true });
+                    await paymentModel.create(obj)
                     resolve(userObj)
                 } else if (subscriptionType == 'Yearly') {
                     const obj = {
+                        userId:userId,
+                        paymentId:paymentId,
+                        amount:amount,
+                        cardType:cardType,
+                        paymentStatus:paymentStatus,
                         subscription: true,
                         subscriptionType: subscriptionType,
                         subscriptionStartDate: todayDate,
@@ -228,6 +251,7 @@ function userSubscription(query: any, userId: string, headers: any): Promise<any
                     }
 
                     const userObj = await userModel.updateOne({ _id: userData._id }, obj, { new: true });
+                    await paymentModel.create(obj)
                     resolve(userObj)
                 } else {
                     reject(new CustomError(errors.en.choseSub, StatusCodes.BAD_REQUEST))
