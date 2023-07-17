@@ -14,6 +14,7 @@ interface User {
   subscriptionStartDate:string;  // Start Date of Subscription
   subscriptionEndDate:string;   //  End Date of Subscription
   stripeId:string;       // Stripe Payment ID
+  cronType:number;
   lastLoginAt: number;
   perDayMessageCount:number;
   userVerify:boolean;
@@ -36,6 +37,7 @@ const schema = new Schema<User>({
   subscriptionStartDate: { type: String },
   subscriptionEndDate: { type: String },
   stripeId: { type: String },
+  cronType: { type: Number },
   lastLoginAt: { type: Number },
   perDayMessageCount: { type: Number },
   userVerify: { type: Boolean, default: false },

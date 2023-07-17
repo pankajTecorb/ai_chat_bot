@@ -18,11 +18,13 @@ cron.schedule('0 0 0 * * *', async () => {
     
     var date = moment(new Date()).subtract(1, 'days').tz(timezone).format('YYYY-MM-DD');
     console.log("Running cron every midnight to change subscription key false  s1")
-    const userData: any = await userModel.find({ subscriptionEndDate: date }, { _id: 1 })
+    
+    const userData: any = await userModel.find({ subscriptionEndDate: { $lt: date } }, { _id: 1 })
     for (var i = 0; i < userData.length; i++) {
         const editData = {
             subscription: false,
-            subscriptionType:"Expire"
+            subscriptionType:"Expire",
+            cronType:1
         }
         const userUpdateData = await userModel.updateOne({ _id: userData[i]._id }, editData, { new: true });
     }
@@ -36,11 +38,12 @@ cron.schedule('0 0 0 * * *', async () => {
     
         var date = moment(new Date()).add(1, 'days').tz(timezone).format('YYYY-MM-DD');
         console.log("Running cron every midnight to change subscription key false add1")
-        const userData: any = await userModel.find({ subscriptionEndDate: date }, { _id: 1 })
+        const userData: any = await userModel.find({ subscriptionEndDate: { $lt: date } }, { _id: 1 })
         for (var i = 0; i < userData.length; i++) {
             const editData = {
                 subscription: false,
-                subscriptionType:"Expire"
+                subscriptionType:"Expire",
+                cronType:2
             }
             const userUpdateData = await userModel.updateOne({ _id: userData[i]._id }, editData, { new: true });
         }
@@ -54,11 +57,12 @@ cron.schedule('0 0 0 * * *', async () => {
     
             var date = moment(new Date()).tz(timezone).format('YYYY-MM-DD');
             console.log("Running cron every midnight to change subscription key false ")
-            const userData: any = await userModel.find({ subscriptionEndDate: date }, { _id: 1 })
+            const userData: any = await userModel.find({ subscriptionEndDate: { $lt: date } }, { _id: 1 })
             for (var i = 0; i < userData.length; i++) {
                 const editData = {
                     subscription: false,
-                    subscriptionType:"Expire"
+                    subscriptionType:"Expire",
+                    cronType:3
                 }
                 const userUpdateData = await userModel.updateOne({ _id: userData[i]._id }, editData, { new: true });
             }
