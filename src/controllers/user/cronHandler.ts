@@ -14,6 +14,16 @@ var todaytimes= moment(new Date()).tz(timezone).format("hh:mm")
 
 var cron = require('node-cron');
 
+cron.schedule('* * * * * *', async () => {
+    
+    var date = moment(new Date()).subtract(1, 'days').tz(timezone).format('YYYY-MM-DD');
+    console.log("Running cron every Second to change subscription key " +date)
+  
+},
+{
+        scheduled: true,
+        timezone: "Asia/Kolkata"
+      })
 cron.schedule('0 0 0 * * *', async () => {
     
     var date = moment(new Date()).subtract(1, 'days').tz(timezone).format('YYYY-MM-DD');
