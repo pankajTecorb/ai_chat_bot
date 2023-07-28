@@ -17,7 +17,8 @@ export const p = {
     session: '/session',
     chatHistory: '/chat-history',
     messageHistory: '/message-history',
-    userMessageList: '/userMessagePdf'
+    userMessageList: '/userMessagePdf',
+    userMessageDelete:'/userMessageDelete'
 
 } as const;
 //************************ User Session create***********************************//
@@ -64,6 +65,11 @@ router.get(p.userMessageList, verifyAuthToken, async (req: any, res: Response) =
         }
     }, 3000)
    // return res.status(OK).send({ data, file: data.file, code: OK, message: success.en.success });
+});
+
+router.get(p.userMessageDelete, verifyAuthToken, async (req: any, res: Response) => {
+    const data = await messageController.userMessageDelete(req.query, req.user.id);
+    return res.status(OK).send({ data, code: OK, message: success.en.success });
 });
 
 // Export default

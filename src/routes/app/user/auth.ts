@@ -19,7 +19,8 @@ export const p = {
      get: '/get',
     update: '/update',
     subscription:'/subscription',
-    logout:'/logout'
+    logout:'/logout',
+    sendOTP:'/sendOTP'
 } as const;
 
 /**
@@ -66,5 +67,14 @@ router.get(p.logout, verifyAuthToken, async (req: any, res: Response) => {
     const data = await userAuthController.logOut( req.user.id);
     return res.status(OK).send({ data, code: OK, message: success.en.success })
 });
+
+/**
+ *  Send OTP
+ */
+router.post(p.sendOTP, async (req: Request, res: Response) => {
+    const data = await userAuthController.sendOtp(req.body);
+    return res.status(OK).send({ data, code: OK, message: success.en.success});
+});
+
 // Export default
 export default router;

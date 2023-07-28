@@ -1,6 +1,8 @@
 import axios from 'axios';
 import moment from 'moment-timezone';
-import nodemailer from 'nodemailer'
+import nodemailer from 'nodemailer';
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 
 
@@ -129,6 +131,26 @@ function sendEmail(data: any) {
 }
 
 
+function sendSms(phone: any, message: any) {
+    const client = require('twilio')(accountSid, authToken);
+    console.log(phone,message)
+    client.messages
+        .create({
+            body: message,
+            from: process.env.TWILIO_PHONE_NUMBER,
+          // from: "8802145669",
+            to: phone
+        })
+        .then((message: any) => {
+            console.log(message.sid)
+        })
+        .catch((err: any) => {
+            console.log(err)
+            throw err
+        });
+}
+
+
 export {
     identityGenerator,
     getEpochAfterNMinutes,
@@ -138,6 +160,6 @@ export {
     getMonthsArray,
     numberFormatter,
     randomNumber,
-    sendEmail
+    sendEmail,sendSms
 
 }

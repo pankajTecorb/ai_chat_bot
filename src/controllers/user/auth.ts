@@ -4,7 +4,7 @@ import { CustomError } from '@utils/errors';
 import StatusCodes from 'http-status-codes';
 const jwt = require('jsonwebtoken');
 import { errors } from '@constants';
-import { randomNumber, getEpochAfterNSeconds } from "@utils/helpers";
+import { randomNumber, getEpochAfterNSeconds ,sendSms} from "@utils/helpers";
 import bcrypt from 'bcrypt';
 const _ = require('lodash');
 import moment from 'moment-timezone';
@@ -282,6 +282,22 @@ function logOut(userId: string): Promise<any> {
     });
 }
 
+function sendOtp(body: any): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const { phoneNumber, role, type } = body;
+            const pin = randomNumber();
+            const time = type == "account_verification" ? getEpochAfterNSeconds(60 * 60) : getEpochAfterNSeconds(5 * 60)
+           // await otpModel.updateOne({ phoneNumber: phoneNumber, role: role, pinType: type }, { pin, pinExpiry: time }, { upsert: true })
+            sendSms(`+91${phoneNumber}`, `Your otp for ${type} is ${pin} \n Valid for next 5 mins`);
+            resolve({
+                otpSend: true
+            })
+        } catch (err) {
+            reject(err)
+        }
+    });
+}
 // Export default
 export default {
     login,
@@ -290,5 +306,6 @@ export default {
     getProfile,
     updateProfile,
     userSubscription,
-    logOut
+    logOut,
+    sendOtp
 } as const;

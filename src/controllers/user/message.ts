@@ -238,12 +238,10 @@ function messageCount(userId: any): Promise<any> {
 function userMessageListPdf(query: any, userId: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
         try {
-
+            const { sessionId } = query
             const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
-            const userMessage: any = await messagesModel.find({ userId: userId }, { updatedAt: 0, createdAt: 0, isDelete: 0, isActive: 0, sessionId: 0, userId: 0, language: 0 })
-            if (!userMessage) {
-                reject(new CustomError(errors.en.notSendMessage, StatusCodes.UNAUTHORIZED))
-            } else {
+            const userMessage: any = await messagesModel.find({ userId: userId, sessionId: sessionId }, { updatedAt: 0, createdAt: 0, isDelete: 0, isActive: 0, sessionId: 0, userId: 0, language: 0 })
+            if (userMessage && userMessage.length > 0) {
                 const valueNumber = randomNumber();
                 const doc = new PDFDocument();
                 // Set the output file path
@@ -284,15 +282,36 @@ function userMessageListPdf(query: any, userId: any): Promise<any> {
                 // // Write the workbook to a file
                 // XLSX.writeFile(workbook, outputPath);
                 // resolve({ file: outputPath })
-            }
 
+
+            } else {
+                reject(new CustomError(errors.en.notSendMessage, StatusCodes.UNAUTHORIZED))
+            }
         } catch (err) {
             reject(err)
         }
     });
 }
 
+function userMessageDelete(query: any, userId: any): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let condition: any = {
+                userId: userId,
+                sessionId: query.sessionId
+  }
+            const response = await messagesModel.deleteMany(condition)
+            if (!response) {
+                reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
+            } else {
+                resolve(response)
+            }
+        } catch (err) {
+            reject(err)
 
+        }
+    });
+}
 
 
 // Helper function to get the content type based on the format
@@ -302,6 +321,7 @@ export default {
     userSession,
     userMessage,
     messageCount,
+    userMessageDelete,
     userSessionHistroy,
     userMessageHistroy,
     userMessageListPdf

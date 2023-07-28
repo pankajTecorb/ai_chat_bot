@@ -5,6 +5,8 @@ import StatusCodes from 'http-status-codes';
 import { errors } from '@constants';
 import moment from 'moment-timezone';
 import mongoose from 'mongoose';
+import { request } from 'http';
+//const stripe = require('stripe')(process.env.Stripe_Publishable_key)
 
 //********************** Create Customer Source Api ************************//
 function createCustomerSource(body: any, userId: any): Promise<any> {
@@ -43,7 +45,8 @@ function createCustomerPyament(body: any, userId: any): Promise<any> {
                     currency: 'inr', // The currency of the payment
                     customer: userData.stripeId, // The ID of the customer
                     payment_method_types: ['card'],
-                    payment_method: cardAttachedID, // The ID of the source attached to the customer
+                    payment_method: cardAttachedID, // The ID of the source attached to the customer,
+                    
                 });
                 const confirmedPaymentIntent = await stripe.paymentIntents.confirm(paymentIntent.id);
                 resolve(confirmedPaymentIntent);
@@ -167,7 +170,29 @@ function customerPaymentList(query: any, userId: any): Promise<any> {
 }
 
 
-
+//********************** Confirm Customer Payment Api ************************//
+function confirmCustomerPyament(body: any, userId: any): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const { paymentId ,cardId,secretKey,return_url} = body
+            const todayDate = moment(new Date()).add(0, 'days').format('YYYY-MM-DD')
+            const userData: any = await userModel.findOne({ _id: userId, isDelete: false })
+            if (!userData) {
+                reject(new CustomError(errors.en.noSuchAccountExist, StatusCodes.UNAUTHORIZED))
+            } else {
+              
+            //    const paymentIntent = await stripe.paymentIntents.confirm(
+            //     paymentId,
+            //     {return_url: return_url}
+            //   );
+                
+               resolve("paymentIntent");
+            }
+        } catch (err) {
+            reject(err)
+        }
+    });
+}
 
 
 
@@ -180,7 +205,8 @@ export default {
     customerCardPaymentList,
     customerCardPaymentUpdate,
     customerCardPaymentDelete,
-    customerPaymentstatus
+    customerPaymentstatus,
+    confirmCustomerPyament,
 
 
 

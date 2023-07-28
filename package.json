@@ -95,6 +95,7 @@
     "promise": "^8.1.0",
     "stripe": "^12.10.0",
     "tscpaths": "^0.0.9",
+    "twilio": "^4.14.0",
     "underscore": "^1.13.2",
     "xlsx": "^0.18.5"
   },
