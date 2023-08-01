@@ -248,7 +248,7 @@ function userMessageListPdf(query: any, userId: any): Promise<any> {
                 const valueNumber = randomNumber();
                 const doc = new PDFDocument();
                 // Set the output file path
-                const outputPath = `./pdf/chat_history+${valueNumber}.pdf`;
+                const outputPath = `./pdfFiles/chat_history+${valueNumber}.pdf`;
                 // Pipe the PDF document to a write stream
                 const writeStream = fs.createWriteStream(outputPath);
                 doc.pipe(writeStream);
