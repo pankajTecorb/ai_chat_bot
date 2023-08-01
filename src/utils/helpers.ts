@@ -138,7 +138,7 @@ function sendSms(phone: any, message: any) {
         .create({
             body: message,
             from: process.env.TWILIO_PHONE_NUMBER,
-          // from: "8802145669",
+        
             to: phone
         })
         .then((message: any) => {
@@ -149,6 +149,7 @@ function sendSms(phone: any, message: any) {
             throw err
         });
 }
+
 
 
 export {

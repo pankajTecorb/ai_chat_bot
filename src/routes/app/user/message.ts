@@ -19,6 +19,7 @@ export const p = {
     messageHistory: '/message-history',
     userMessageList: '/userMessagePdf',
     userMessageDelete:'/userMessageDelete'
+   
 
 } as const;
 //************************ User Session create***********************************//
@@ -50,6 +51,7 @@ router.get(p.userMessageList, verifyAuthToken, async (req: any, res: Response) =
     //res.setHeader('Content-Disposition', `attachment; filename=${data.file}`);
    // res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Type', 'application/pdf');
+   
     setTimeout(() => {
         res.download(data.file);
 
@@ -71,6 +73,7 @@ router.get(p.userMessageDelete, verifyAuthToken, async (req: any, res: Response)
     const data = await messageController.userMessageDelete(req.query, req.user.id);
     return res.status(OK).send({ data, code: OK, message: success.en.success });
 });
+
 
 // Export default
 export default router;
