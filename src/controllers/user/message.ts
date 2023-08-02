@@ -8,6 +8,8 @@ import { randomNumber } from '@utils/helpers'
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const XLSX = require('xlsx');
+const path = require("path");
+
 
 
 
@@ -248,7 +250,8 @@ function userMessageListPdf(query: any, userId: any): Promise<any> {
                 const valueNumber = randomNumber();
                 const doc = new PDFDocument();
                 // Set the output file path
-                const outputPath = `./pdfFiles/chat_history+${valueNumber}.pdf`;
+               
+               const outputPath = `./pdfFiles/${valueNumber}.pdf`;
                 // Pipe the PDF document to a write stream
                 const writeStream = fs.createWriteStream(outputPath);
                 doc.pipe(writeStream);
@@ -266,7 +269,7 @@ function userMessageListPdf(query: any, userId: any): Promise<any> {
                     }
                     doc.moveDown(2);
                 });
-
+               
                 // Finalize the PDF document
                 doc.end();
                 resolve({ file: outputPath })

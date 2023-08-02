@@ -50,10 +50,11 @@ router.get(p.userMessageList, verifyAuthToken, async (req: any, res: Response) =
     const data = await messageController.userMessageListPdf(req.query, req.user.id);
     //res.setHeader('Content-Disposition', `attachment; filename=${data.file}`);
    // res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Type', 'application/pdf');
+   // res.setHeader('Content-Type', 'application/pdf');
    
     setTimeout(() => {
-        res.download(data.file);
+      //  res.send(data.file);
+      return res.status(OK).send({ data,  code: OK, message: success.en.success });
 
     }, 1000)
     setTimeout(() => {
@@ -65,8 +66,8 @@ router.get(p.userMessageList, verifyAuthToken, async (req: any, res: Response) =
         } else {
             console.log("No such file exist...")
         }
-    }, 3000)
-   // return res.status(OK).send({ data, file: data.file, code: OK, message: success.en.success });
+    }, 7000)
+  //  return res.status(OK).send({ data, file: data.file, code: OK, message: success.en.success });
 });
 
 router.get(p.userMessageDelete, verifyAuthToken, async (req: any, res: Response) => {
