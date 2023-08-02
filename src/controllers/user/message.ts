@@ -300,13 +300,15 @@ function userMessageDelete(query: any, userId: any): Promise<any> {
         try {
             let condition: any = {
                 userId: userId,
-                sessionId: query.sessionId
-  }
-            const response = await messagesModel.deleteMany(condition)
+                _id: query.sessionId
+            }
+            const response: any = await messagesSessionModel.findOne(condition)
             if (!response) {
                 reject(new CustomError(errors.en.noDatafound, StatusCodes.BAD_REQUEST))
             } else {
-                resolve(response)
+                const deleteSession = await messagesSessionModel.deleteOne({ _id: response._id })
+                const deleteMessage = await messagesModel.deleteMany({ sessionId: response._id })
+                resolve(deleteSession)
             }
         } catch (err) {
             reject(err)
@@ -328,6 +330,6 @@ export default {
     userSessionHistroy,
     userMessageHistroy,
     userMessageListPdf
-   
+
 
 } as const;
