@@ -53,8 +53,7 @@ router.get(p.userMessageList, verifyAuthToken, async (req: any, res: Response) =
    // res.setHeader('Content-Type', 'application/pdf');
    
     setTimeout(() => {
-      //  res.send(data.file);
-      return res.status(OK).send({ data,  code: OK, message: success.en.success });
+        res.download(data.file);
 
     }, 1000)
     setTimeout(() => {
@@ -66,7 +65,7 @@ router.get(p.userMessageList, verifyAuthToken, async (req: any, res: Response) =
         } else {
             console.log("No such file exist...")
         }
-    }, 7000)
+    }, 4000)
   //  return res.status(OK).send({ data, file: data.file, code: OK, message: success.en.success });
 });
 
